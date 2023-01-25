@@ -1,0 +1,32 @@
+{
+  "generatedBy": "Microsoft.NET.Sdk.Functions.Generator-4.1.3",
+  "configurationSource": "attributes",
+  "bindings": [
+    {
+      "type": "eventHubTrigger",
+      "eventHubName": "%EventHubName%",
+      "consumerGroup": "%EventHubConsumerGroup%",
+      "connection": "EventHubConnection",
+      "name": "messages"
+    },
+    {
+      "type": "queue",
+      "queueName": "deadletterqueue",
+      "connection": "DeadLetterStorage",
+      "name": "deadLetterMessages"
+    },
+    {
+      "type": "cosmosDB",
+      "databaseName": "%COSMOSDB_DATABASE_NAME%",
+      "collectionName": "%COSMOSDB_DATABASE_COL%",
+      "createIfNotExists": false,
+      "connectionStringSetting": "COSMOSDB_CONNECTION_STRING",
+      "useMultipleWriteLocations": false,
+      "useDefaultJsonSerialization": false,
+      "name": "devices"
+    }
+  ],
+  "disabled": false,
+  "scriptFile": "../bin/DroneTelemetryFunctionApp.dll",
+  "entryPoint": "DroneTelemetryFunctionApp.RawTelemetryFunction.RunAsync"
+}
