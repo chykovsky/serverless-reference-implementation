@@ -54,10 +54,10 @@ stages:
     #   displayName: 'bump version'
 
     - script: |
-      cd $(Build.SourcesDirectory)
-      echo $(docker run --rm -v "$(pwd):/repo" gittools/gitversion /repo) > .gitversion
-      echo $(cat .gitversion | jq '.MajorMinorPatch' | sed -e 's/\+/-/g' | sed -e 's/\"//g') > /tmp/version.txt
-      echo $(cat .gitversion | jq '.FullSemVer' | sed -e 's/\+/-/g' | sed -e 's/\"//g') > /tmp/semver.txt
+        cd $(Build.SourcesDirectory)
+        echo $(docker run --rm -v "$(pwd):/repo" gittools/gitversion /repo) > .gitversion
+        echo $(cat .gitversion | jq '.MajorMinorPatch' | sed -e 's/\+/-/g' | sed -e 's/\"//g') > /tmp/version.txt
+        echo $(cat .gitversion | jq '.FullSemVer' | sed -e 's/\+/-/g' | sed -e 's/\"//g') > /tmp/semver.txt
     displayName: 'bump version'
 
     - task: PublishBuildArtifacts@1
