@@ -64,15 +64,15 @@ stages:
       displayName: 'bump version'
 
     - script: |
-      echo "current dir = " $(pwd)
-      echo "Build.SourcesDirectory = " $(Build.SourcesDirectory)
-      echo "ls -la = "
-      ls -la
-      echo "cat /tmp/semver.txt:"
-      cat /tmp/semver.txt
-      echo "cat /tmp/version.txt:"
-      cat /tmp/version.txt
-    displayName: 'debug build phase'
+        echo "current dir = " $(pwd)
+        echo "Build.SourcesDirectory = " $(Build.SourcesDirectory)
+        echo "ls -la = "
+        ls -la
+        echo "cat /tmp/semver.txt:"
+        cat /tmp/semver.txt
+        echo "cat /tmp/version.txt:"
+        cat /tmp/version.txt
+      displayName: 'debug build phase'
 
     - task: PublishBuildArtifacts@1
       condition: ${{ false }}
