@@ -52,22 +52,22 @@ stages:
         # echo $(cat .gitversion | grep -oP '(?<="MajorMinorPatch":")[^"]*') > src/ClientApp/public/version.txt
         echo $(cat .gitversion | jq '.MajorMinorPatch' | sed -e "s/\+/-/g" | sed -e "s/\"//g") > src/ClientApp/public/version.txt
         # echo $(cat .gitversion | grep -oP '(?<="FullSemVer":")[^"]*' | sed -e "s/\+/-/g") > src/ClientApp/public/semver.txt
-        echo $(cat .gitversion | jq '.FullSemVer' | sed -e "s/\+/-/g" | sed -e "s/\"//g") > src/ClientApp/public/version.txt
+        echo $(cat .gitversion | jq '.FullSemVer' | sed -e "s/\+/-/g" | sed -e "s/\"//g") > src/ClientApp/public/semver.txt
       displayName: 'bump version'
 
     - task: PublishBuildArtifacts@1
       inputs:
         pathtoPublish: 'src/ClientApp/public'
         artifactName: 'drop'
-        # publishLocation: 'Container'
-        publishLocation: 'FilePath'
+        publishLocation: 'Container'
+        # publishLocation: 'FilePath' #Needs a fileshare that the agent has access to
 
     - script: |
         pwd
         echo $(Build.SourcesDirectory)
         ls -la
         ls -la $(Build.SourcesDirectory)/src/ClientApp/public
-        # type $(Build.SourcesDirectory)/src/ClientApp/public/drop # Artifact goes to a container. 
+        # type $(Build.SourcesDirectory)/src/ClientApp/public/drop # Artifact goes to a container i.e. Azure Pipelines 
         cat $(Build.SourcesDirectory)/src/ClientApp/public/semver.txt
         cat $(Build.SourcesDirectory)/src/ClientApp/public/version.txt
         which jq
@@ -87,8 +87,10 @@ stages:
         deploy:
           steps:
           - script: |
-              echo '##vso[task.setvariable variable=releaseVersion]'$(cat "$(Pipeline.Workspace)/drop/version.txt")
-              echo '##vso[task.setvariable variable=releaseSemVer]'$(cat "$(Pipeline.Workspace)/drop/semver.txt")
+              # echo '##vso[task.setvariable variable=releaseVersion]'$(cat "$(Pipeline.Workspace)/drop/version.txt")
+              # echo '##vso[task.setvariable variable=releaseSemVer]'$(cat "$(Pipeline.Workspace)/drop/semver.txt")
+              echo '##vso[task.setvariable variable=releaseVersion]'$(cat "$(Build.SourcesDirectory)/src/ClientApp/public/version.txt")
+              echo '##vso[task.setvariable variable=releaseSemVer]'$(cat "$(Build.SourcesDirectory)/src/ClientApp/public//semver.txt")
             displayName: 'set release version'
             name: setVarReleaseVersion
 
@@ -106,11 +108,11 @@ stages:
           - script: |
               az login --service-principal -u $(azureArmClientId) -p $(azureArmClientSecret) --tenant $(azureArmTenantId)
               # upload content to container versioned folder
-              # az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\$(releaseSemVer)" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.html" --content-type "text/html"
-              # az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\$(releaseSemVer)" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.js" --content-type "application/javascript"
-              # az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\$(releaseSemVer)" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.js.map" --content-type "application/octet-stream"
-              # az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\$(releaseSemVer)" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.json" --content-type "application/json"
-              # az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\$(releaseSemVer)" --account-name $(azureStorageAccountName) --pattern "*.txt" --content-type "text/plain"
+              az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\$(releaseSemVer)" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.html" --content-type "text/html"
+              az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\$(releaseSemVer)" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.js" --content-type "application/javascript"
+              az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\$(releaseSemVer)" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.js.map" --content-type "application/octet-stream"
+              az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\$(releaseSemVer)" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.json" --content-type "application/json"
+              az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\$(releaseSemVer)" --account-name $(azureStorageAccountName) --pattern "*.txt" --content-type "text/plain"
 
               # az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\v1.0.2" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.html" --content-type "text/html"
               # az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\v1.0.2" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.js" --content-type "application/javascript"
