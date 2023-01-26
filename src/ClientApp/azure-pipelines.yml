@@ -22,9 +22,7 @@ stages:
         versionSpec: '10.x'
       displayName: 'install node.js'
 
-    - script:
-      condition: ${{ false }}
-        |
+    - script: |
         cd src/ClientApp
         cat > .env.production <<EOF
         AZURE_TENANT_ID=$(azureTenantId)
@@ -33,22 +31,21 @@ stages:
         AZURE_API_URL=$(azureApiUrl)
         EOF
       displayName: 'configure azure tenant, client and api details'
-
-    - script: 
       condition: ${{ false }}
-        |
+
+    - script: |
         cd src/ClientApp
         npm install
         npx gatsby build
       displayName: 'gatsby build'
-
-    - script:
       condition: ${{ false }}
-        |
+
+    - script: |
         cd src/ClientApp/public
         sudo apt-get install brotli --install-suggests --no-install-recommends -q --assume-yes
         for f in $(find . -type f \( -iname '*.html' -o -iname '*.map' -o -iname '*.js' -o -iname '*.json' \)); do brotli $f -Z -j -f -v && mv ${f}.br $f; done
       displayName: 'enable compression at origin level'
+      condition: ${{ false }}
 
     # - script: |
     #     # cd $(Build.SourcesDirectory)
