@@ -59,7 +59,8 @@ stages:
       inputs:
         pathtoPublish: 'src/ClientApp/public'
         artifactName: 'drop'
-        publishLocation: 'Container'
+        # publishLocation: 'Container'
+        publishLocation: 'FilePath'
 
     - script: |
         pwd
