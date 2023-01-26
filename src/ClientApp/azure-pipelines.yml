@@ -46,7 +46,8 @@ stages:
 
     - script: |
         cd $(Build.SourcesDirectory)
-        echo $(docker run --rm -v "$(pwd):/repo" gittools/gitversion:5.0.1-linux-netcoreapp2.1 /repo) > .gitversion
+        # echo $(docker run --rm -v "$(pwd):/repo" gittools/gitversion:5.0.1-linux-netcoreapp2.1 /repo) > .gitversion
+        echo $(docker run --rm -v "$(pwd):/repo" gittools/gittools/gitversion:5.10.0-alpine.3.14-6.0 /repo) > .gitversion
         echo $(cat .gitversion | grep -oP '(?<="MajorMinorPatch":")[^"]*') > src/ClientApp/public/version.txt
         echo $(cat .gitversion | grep -oP '(?<="FullSemVer":")[^"]*' | sed -e "s/\+/-/g") > src/ClientApp/public/semver.txt
       displayName: 'bump version'
@@ -93,8 +94,8 @@ stages:
               repositoryName: '$(Build.Repository.Name)'
               tagSource: manual
               action: edit
-              # tag: $(releaseVersion)
-              tag: v1.0.2 
+              tag: $(releaseVersion)
+              # tag: v1.0.2 
               title: 'Fabrikam Drone Status App $(releaseVersion)'
           
           - script: |
@@ -106,11 +107,11 @@ stages:
               # az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\$(releaseSemVer)" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.json" --content-type "application/json"
               # az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\$(releaseSemVer)" --account-name $(azureStorageAccountName) --pattern "*.txt" --content-type "text/plain"
 
-              az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\v1.0.2" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.html" --content-type "text/html"
-              az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\v1.0.2" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.js" --content-type "application/javascript"
-              az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\v1.0.2" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.js.map" --content-type "application/octet-stream"
-              az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\v1.0.2" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.json" --content-type "application/json"
-              az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\v1.0.2" --account-name $(azureStorageAccountName) --pattern "*.txt" --content-type "text/plain"
+              # az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\v1.0.2" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.html" --content-type "text/html"
+              # az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\v1.0.2" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.js" --content-type "application/javascript"
+              # az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\v1.0.2" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.js.map" --content-type "application/octet-stream"
+              # az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\v1.0.2" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.json" --content-type "application/json"
+              # az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\v1.0.2" --account-name $(azureStorageAccountName) --pattern "*.txt" --content-type "text/plain"
 
               # target new version
               az cdn endpoint update --resource-group $(azureResourceGroup) --profile-name $(azureCdnName) --name $(azureCdnName) --origin-path '/$(releaseSemVer)'
