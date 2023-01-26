@@ -56,31 +56,28 @@ stages:
     #     # echo $(cat .gitversion | grep -oP '(?<="FullSemVer":")[^"]*' | sed -e "s/\+/-/g") > src/ClientApp/public/semver.txt
     #   displayName: 'bump version'
 
-    # - script: |
-    #     cd $(Build.SourcesDirectory)
-    #     # echo $(docker run --rm -v "$(pwd):/repo" gittools/gitversion /repo) > .gitversion
-    #     echo $(docker run --rm -v "$(pwd):/repo" gittools/gitversion:5.10.0-alpine.3.14-6.0 /repo) > .gitversion
-    #     echo $(cat .gitversion | jq '.MajorMinorPatch' | sed -e 's/\+/-/g' | sed -e 's/\"//g') > /tmp/version.txt
-    #     echo $(cat .gitversion | jq '.FullSemVer' | sed -e 's/\+/-/g' | sed -e 's/\"//g') > /tmp/semver.txt
-    #   displayName: 'bump version'
+    - script: |
+        cd $(Build.SourcesDirectory)
+        echo $(docker run --rm -v "$(pwd):/repo" gittools/gitversion:5.3.4-linux-alpine.3.10-x64-netcoreapp3.1 /repo -output json) > .gitversion
+        echo $(cat .gitversion | jq '.MajorMinorPatch' | sed -e 's/\+/-/g' | sed -e 's/\"//g') > /tmp/version.txt
+        echo $(cat .gitversion | jq '.FullSemVer' | sed -e 's/\+/-/g' | sed -e 's/\"//g') > /tmp/semver.txt
+      displayName: 'bump version'
 
     - script: |
-        echo "which git"
-        which git
-        # echo "current dir = " $(pwd)
-        # echo "Build.SourcesDirectory = " $(Build.SourcesDirectory)
-        # echo "ls -la = "
-        # ls -la
-        # echo "ls -la .gitversion"
-        # ls -la .gitversion
-        # echo "cat .gitversion"
-        # cat .gitversion
-        # echo "ls -la /tmp = "
-        # ls -la /tmp
-        # echo "cat /tmp/semver.txt:"
-        # cat /tmp/semver.txt
-        # echo "cat /tmp/version.txt:"
-        # cat /tmp/version.txt
+        echo "current dir = " $(pwd)
+        echo "Build.SourcesDirectory = " $(Build.SourcesDirectory)
+        echo "ls -la = "
+        ls -la
+        echo "ls -la .gitversion"
+        ls -la .gitversion
+        echo "cat .gitversion"
+        cat .gitversion
+        echo "ls -la /tmp = "
+        ls -la /tmp
+        echo "cat /tmp/semver.txt:"
+        cat /tmp/semver.txt
+        echo "cat /tmp/version.txt:"
+        cat /tmp/version.txt
       displayName: 'debug build phase'
 
     - task: PublishBuildArtifacts@1
