@@ -91,7 +91,7 @@ stages:
       displayName: 'debug build phase'
 
 - stage: Deploy
-  condition: ${{ if eq(1, 2) }}
+  condition: ${{ false }}
   jobs:
   - deployment: WebsiteDeploy
     displayName: Deploy Fabrikam Drone Status app
