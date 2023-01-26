@@ -12,8 +12,9 @@ stages:
   jobs:
   - job: WebsiteBuild
     displayName: Build Fabrikam Drone Status app using Gatbsyjs
-    pool:
-      vmImage: 'Ubuntu-16.04'
+    # pool:
+    #   vmImage: 'Ubuntu-16.04'
+    agentPool: 'Azure Pipelines'
     continueOnError: false
     steps:
     - task: NodeTool@0
@@ -60,8 +61,9 @@ stages:
   jobs:
   - deployment: WebsiteDeploy
     displayName: Deploy Fabrikam Drone Status app
-    pool:
-      vmImage: 'Ubuntu-16.04'
+    # pool:
+    #   vmImage: 'Ubuntu-16.04'
+    agentPool: 'Azure Pipelines'
     environment: 'donotdelete'
     strategy:
       runOnce:
