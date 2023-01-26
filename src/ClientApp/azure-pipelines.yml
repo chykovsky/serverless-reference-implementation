@@ -68,6 +68,10 @@ stages:
         echo "Build.SourcesDirectory = " $(Build.SourcesDirectory)
         echo "ls -la = "
         ls -la
+        echo "ls -la .gitversion"
+        ls -la .gitversion
+        "echo cat .gitversion"
+        cat .gitversion
         echo "ls -la /tmp = "
         ls -la /tmp
         echo "cat /tmp/semver.txt:"
