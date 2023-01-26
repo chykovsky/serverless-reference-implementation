@@ -65,7 +65,7 @@ stages:
         # type $(Build.SourcesDirectory)/src/ClientApp/public/drop # Artifact goes to a container. 
         cat $(Build.SourcesDirectory)/src/ClientApp/public/semver.txt
         cat $(Build.SourcesDirectory)/src/ClientApp/public/version.txt 
-        exit 0
+        # exit 0
       displayName: 'debug build phase'
 
 - stage: Deploy
