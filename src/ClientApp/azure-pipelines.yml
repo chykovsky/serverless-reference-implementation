@@ -58,12 +58,12 @@ stages:
         publishLocation: 'Container'
 
     - script: |
-      pwd
-      echo $(Build.SourcesDirectory)
-      ls -la
-      ls -la $(Build.SourcesDirectory)/src/ClientApp/public
-      type $(Build.SourcesDirectory)/src/ClientApp/public/drop
-      exit
+        pwd
+        echo $(Build.SourcesDirectory)
+        ls -la
+        ls -la $(Build.SourcesDirectory)/src/ClientApp/public
+        type $(Build.SourcesDirectory)/src/ClientApp/public/drop
+        exit
 
 - stage: Deploy
   jobs:
