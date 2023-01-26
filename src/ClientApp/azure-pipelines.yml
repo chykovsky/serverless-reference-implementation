@@ -91,7 +91,7 @@ stages:
       displayName: 'debug build phase'
 
 - stage: Deploy
-  condition: 1 = 2
+  condition: (1 == 2)
   jobs:
   - deployment: WebsiteDeploy
     displayName: Deploy Fabrikam Drone Status app
