@@ -94,17 +94,24 @@ stages:
               tagSource: manual
               action: edit
               # tag: $(releaseVersion)
-              tag: v1.0.1 
+              tag: v1.0.2 
               title: 'Fabrikam Drone Status App $(releaseVersion)'
           
           - script: |
               az login --service-principal -u $(azureArmClientId) -p $(azureArmClientSecret) --tenant $(azureArmTenantId)
               # upload content to container versioned folder
-              az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\$(releaseSemVer)" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.html" --content-type "text/html"
-              az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\$(releaseSemVer)" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.js" --content-type "application/javascript"
-              az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\$(releaseSemVer)" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.js.map" --content-type "application/octet-stream"
-              az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\$(releaseSemVer)" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.json" --content-type "application/json"
-              az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\$(releaseSemVer)" --account-name $(azureStorageAccountName) --pattern "*.txt" --content-type "text/plain"
+              # az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\$(releaseSemVer)" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.html" --content-type "text/html"
+              # az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\$(releaseSemVer)" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.js" --content-type "application/javascript"
+              # az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\$(releaseSemVer)" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.js.map" --content-type "application/octet-stream"
+              # az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\$(releaseSemVer)" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.json" --content-type "application/json"
+              # az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\$(releaseSemVer)" --account-name $(azureStorageAccountName) --pattern "*.txt" --content-type "text/plain"
+
+              az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\v1.0.2" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.html" --content-type "text/html"
+              az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\v1.0.2" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.js" --content-type "application/javascript"
+              az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\v1.0.2" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.js.map" --content-type "application/octet-stream"
+              az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\v1.0.2" --account-name $(azureStorageAccountName) --content-encoding br --pattern "*.json" --content-type "application/json"
+              az storage blob upload-batch -s "$(Pipeline.Workspace)/drop" --destination "\$web\v1.0.2" --account-name $(azureStorageAccountName) --pattern "*.txt" --content-type "text/plain"
+
               # target new version
               az cdn endpoint update --resource-group $(azureResourceGroup) --profile-name $(azureCdnName) --name $(azureCdnName) --origin-path '/$(releaseSemVer)'
               AZURE_CDN_ENDPOINT_HOSTNAME=$(az cdn endpoint show --resource-group $(azureResourceGroup) --name $(azureCdnName) --profile-name $(azureCdnName) --query hostName -o tsv)
