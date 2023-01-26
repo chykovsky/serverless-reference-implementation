@@ -79,6 +79,7 @@ stages:
             displayName: 'create or edit GitHub release'
             inputs:
               gitHubConnection: $(gitHubServiceConnectionName)
+              repositoryName: '$(Build.Repository.Name)'
               tagSource: manual
               action: edit
               tag: $(releaseVersion)
