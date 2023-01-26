@@ -62,7 +62,7 @@ stages:
     displayName: Deploy Fabrikam Drone Status app
     pool:
       vmImage: 'Ubuntu-16.04'
-    environment: 'fabrikamdronestatus-prod'
+    environment: 'donotdelete'
     strategy:
       runOnce:
         deploy:
