@@ -75,15 +75,15 @@ stages:
             displayName: 'set release version'
             name: setVarReleaseVersion
 
-          - task: GithubRelease@0
-            displayName: 'create or edit GitHub release'
-            inputs:
-              gitHubConnection: $(gitHubServiceConnectionName)
-              repositoryName: '$(Build.Repository.Name)'
-              tagSource: manual
-              action: edit
-              tag: $(releaseVersion)
-              title: 'Fabrikam Drone Status App $(releaseVersion)'
+          # - task: GithubRelease@0
+          #   displayName: 'create or edit GitHub release'
+          #   inputs:
+          #     gitHubConnection: $(gitHubServiceConnectionName)
+          #     repositoryName: '$(Build.Repository.Name)'
+          #     tagSource: manual
+          #     action: edit
+          #     tag: $(releaseVersion)
+          #     title: 'Fabrikam Drone Status App $(releaseVersion)'
           
           - script: |
               az login --service-principal -u $(azureArmClientId) -p $(azureArmClientSecret) --tenant $(azureArmTenantId)
