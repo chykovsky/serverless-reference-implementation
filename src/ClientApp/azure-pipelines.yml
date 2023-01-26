@@ -58,7 +58,8 @@ stages:
 
     - script: |
         cd $(Build.SourcesDirectory)
-        echo $(docker run --rm -v "$(pwd):/repo" gittools/gitversion /repo) > .gitversion
+        # echo $(docker run --rm -v "$(pwd):/repo" gittools/gitversion /repo) > .gitversion
+        echo $(docker run --rm -v "$(pwd):/repo" gittools/gitversion:5.10.0-alpine.3.14-6.0 /repo) > .gitversion
         echo $(cat .gitversion | jq '.MajorMinorPatch' | sed -e 's/\+/-/g' | sed -e 's/\"//g') > /tmp/version.txt
         echo $(cat .gitversion | jq '.FullSemVer' | sed -e 's/\+/-/g' | sed -e 's/\"//g') > /tmp/semver.txt
       displayName: 'bump version'
